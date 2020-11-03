@@ -14,6 +14,7 @@ services:
       - db
       - rabbitmq
       - celery
+      - redis
     environment:
         DEBUG: 'True'
         DATABASE_URL: 'postgres://postgres:postgres@db:5432/postgres'
@@ -43,7 +44,13 @@ services:
       depends_on:
           - db
           - rabbitmq
+          - redis 
       environment:
           DEBUG: 'True'
           DATABASE_URL: 'postgres://postgres:@db:5432/postgres'
           BROKER_URL: 'amqp://user:password@rabbitmq:5672/my_vhost'
+
+  redis:
+    image: redis:6.0.9-alpine
+    ports:
+      - "6379:6379"

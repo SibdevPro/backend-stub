@@ -18,10 +18,19 @@ SITE_ID = 1
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ##################################################################
-# Databases settings (with docker)
+# Databases and cache settings (with docker)
 ##################################################################
 
 DATABASES = {'default': dj_database_url.config()}
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://localhost:6379/",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 ##################################################################
 # Logging settings
