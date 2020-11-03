@@ -5,13 +5,13 @@ dj-database-url==0.5.0
 gunicorn==20.0.4
 celery==4.4.7
 
-ipython==7.18.1 # приятная работа в shell
+ipython==7.18.1 # pretty shell
 
-django-constance==2.7.0 # динамичные переменые
-django-picklefield==3.0.1 # использование constance через админку
+django-constance==2.7.0 # dynamic constants
+django-picklefield==3.0.1 # for using dynamic constance through admin panel
 
-django-admin-sortable2==0.7.7 # удобная сортировка для админки
-django-des==2.4.1 # динамические настройки почты
-Pillow==7.2.0 # для работы с изображениями
+django-admin-sortable2==0.7.7 # pretty sorting for admin panel
+django-des==2.4.1 # dynamic configuration for emails
+Pillow==7.2.0 # for working with images
 
 git+https://github.com/SibdevPro/django-hash-static.git@1.0.2 # хэширование статики
