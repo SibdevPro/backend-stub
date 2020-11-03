@@ -1,48 +1,49 @@
 version: '3.3'
 services:
-    server:
+  server:
+    build:
+      context: ./
+      dockerfile: ./server/Dockerfile
+    command: python manage.py runserver_plus 0.0.0.0:8000
+
+    volumes:
+      - ./server:/server
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - rabbitmq
+      - celery
+    environment:
+        DEBUG: 'True'
+        DATABASE_URL: 'postgres://postgres:postgres@db:5432/postgres'
+        BROKER_URL: 'amqp://user:password@rabbitmq:5672/my_vhost'
+
+  db:
+      image: postgres:12.4-alpine
+      environment:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
+  rabbitmq:
+      image: rabbitmq:3.8.8-alpine
+      environment:
+          RABBITMQ_DEFAULT_USER: 'user'
+          RABBITMQ_DEFAULT_PASS: 'password'
+          RABBITMQ_DEFAULT_VHOST: 'my_vhost'
+
+  celery:
       build:
-        context: ./
-        dockerfile: ./server/Dockerfile
-      command: python manage.py runserver 0.0.0.0:8000
+          context: ./
+          dockerfile: ./server/Dockerfile
+      command: celery -A config worker -B -l info -Q default,celery -s /var/run/celerybeat-schedule
       volumes:
-        - ./server:/server
-      ports:
-        - "8000:8000"
+          - ./server:/server
       depends_on:
-        - db
-        - rabbitmq
-        - celery
+          - db
+          - rabbitmq
       environment:
           DEBUG: 'True'
-          DATABASE_URL: 'postgres://postgres:postgres@db:5432/postgres'
+          DATABASE_URL: 'postgres://postgres:@db:5432/postgres'
           BROKER_URL: 'amqp://user:password@rabbitmq:5672/my_vhost'
-
-    db:
-        image: postgres:12.4-alpine
-        environment:
-            POSTGRES_DB: postgres
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-
-    rabbitmq:
-        image: rabbitmq:3.8.8-alpine
-        environment:
-            RABBITMQ_DEFAULT_USER: 'user'
-            RABBITMQ_DEFAULT_PASS: 'password'
-            RABBITMQ_DEFAULT_VHOST: 'my_vhost'
-
-    celery:
-        build:
-            context: ./
-            dockerfile: ./server/Dockerfile
-        command: celery -A config worker -B -l info -Q default,celery -s /var/run/celerybeat-schedule
-        volumes:
-            - ./server:/server
-        depends_on:
-            - db
-            - rabbitmq
-        environment:
-            DEBUG: 'True'
-            DATABASE_URL: 'postgres://postgres:@db:5432/postgres'
-            BROKER_URL: 'amqp://user:password@rabbitmq:5672/my_vhost'

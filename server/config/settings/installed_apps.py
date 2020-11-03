@@ -11,6 +11,7 @@ INSTALLED_APPS = [
     'constance.backends.database',
     'des',
     'adminsortable2',
+    'django_extensions',
 ]
 
 LOCAL_APPS = []

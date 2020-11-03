@@ -2,6 +2,9 @@
 
 # DEBUG
 django-debug-toolbar==2.2 # debug panel
+django-extensions==3.0.9 # set of extensions for django (e.g. extended debug panel for 500's errors)
+Werkzeug==1.0.1 # WSGI-server for debugging in django-extensions
+pyOpenSSL==19.1.0 # add SSL-certificate to django-extensions
 
 # LINTING
 pep8-naming==0.11.1 # check naming for pep8 conventions
