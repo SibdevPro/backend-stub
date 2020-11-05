@@ -8,5 +8,3 @@ ADD ./server/requirements/prod.txt /server/requirements.txt
 RUN pip install -r requirements.txt
 
 ADD ./server /server
-
-RUN python manage.py collectstatic --noinput
