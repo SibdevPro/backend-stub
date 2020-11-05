@@ -139,12 +139,8 @@ FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o777
 if DEBUG:
     from .installed_apps import INSTALLED_APPS
 
-    def show_toolbar(request):
-        from django.conf import settings
-        return settings.DEBUG
-
     DEBUG_TOOLBAR_CONFIG = {
-        'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+        'SHOW_TOOLBAR_CALLBACK': lambda request: True,
     }
     MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
-    INSTALLED_APPS += ['debug_toolbar']
+    INSTALLED_APPS += ['debug_toolbar', 'django_extensions',]
