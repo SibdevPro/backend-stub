@@ -19,9 +19,14 @@ services:
             - /data/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/media/:/server/media
             - /data/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/wait-for-postgres.sh:/server/wait-for-postgres.sh
         depends_on:
-            - db
-            - rabbitmq
-            - redis
+            db:
+                condition: service_healthy
+            rabbitmq:
+                condition: service_started
+            celery:
+                condition: service_started
+            redis:
+                condition: service_started
         environment:
             DEBUG: 'False'
             DATABASE_URL: 'postgres://postgres:postgres@db:5432/postgres'
@@ -33,6 +38,11 @@ services:
         image: postgres:12.4-alpine
         volumes:
             - ./pg_data:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
         environment:
             POSTGRES_DB: postgres
             POSTGRES_USER: postgres
