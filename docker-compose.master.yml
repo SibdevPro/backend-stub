@@ -14,10 +14,9 @@ services:
     server:
         restart: always
         image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/server:master-latest
-        command: ["./wait-for-postgres.sh", "db", "gunicorn", "config.wsgi -c ./config/gunicorn.py"]
+        command: gunicorn config.wsgi -c ./config/gunicorn.py
         volumes:
             - /data/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/media/:/server/media
-            - /data/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/wait-for-postgres.sh:/server/wait-for-postgres.sh
         depends_on:
             db:
                 condition: service_healthy
